@@ -4,6 +4,6 @@
 small{
     color: red;
 }
-.content{
+#content{
     visibility: hidden;
 }

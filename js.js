@@ -1,82 +1,101 @@
-
-document.addEventListener('DOMContentLoaded', ()=>{
-    const dateError = document.querySelector('[data-error="date-error"]')
-    const nombreError = document.querySelector('[data-error="nombre-error"]')
-    const passwordError = document.querySelector('[data-error="password-error"]')
-    const birthdate = document.getElementById('birthdate').value;
-    const errorDiv = document.getElementById('error');
+document.addEventListener('DOMContentLoaded', () => {
+    const dateError = document.querySelector('[data-error="date-error"]');
+    const nombreError = document.querySelector('[data-error="nombre-error"]');
+    const passwordError = document.querySelector('[data-error="password-error"]');
+    const form = document.getElementById('form');
     const contentDiv = document.getElementById('content');
-    const ageVerificationDiv = document.getElementById('ageVerification');
-    const boton = document.querySelector('#boton')
-    const nombreInput = document.getElementById('nombre')
-    const passwordInput = document.getElementById('password')
-    const form = document.getElementById('form')
-    debugger
-    // verificarEdad()
-    form.addEventListener('submit', (event)=>{
-        function verificarEdad() {
-    
-            if (!birthdate) {
-                passwordError.textContent = 'Por favor, ingrese una fecha de nacimiento válida.';
-                return;
-            }
+    const nombreInput = document.getElementById('nombre');
+    const passwordInput = document.getElementById('password');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
         
-            const birthDate = new Date(birthdate);
+        function verificarEdad() {
+            const birthdate = document.getElementById('birthdate').value;
+            const birthDateNuevo = new Date(birthdate);
             const today = new Date();
-            const age = today.getFullYear() - birthDate.getFullYear();
-            const monthDifference = today.getMonth() - birthDate.getMonth();
-            const dayDifference = today.getDate() - birthDate.getDate();
-            debugger
-            // Ajuste de edad si la fecha actual es antes del cumpleaños de este año
+            let age = today.getFullYear() - birthDateNuevo.getFullYear();
+            console.log(age)
+            const monthDifference = today.getMonth() - birthDateNuevo.getMonth();
+            const dayDifference = today.getDate() - birthDateNuevo.getDate();
+
             if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
                 age--;
             }
-        
+
             if (age >= 18) {
-                passwordError.textContent = '';
-                ageVerificationDiv.style.display = 'none';
-                return true
+                dateError.textContent = '';
+                return true;
             } else {
-                passwordError.textContent = 'Lo sentimos, debes tener al menos 18 años para acceder a este contenido.';
-            return false
+                dateError.textContent = 'Lo sentimos, debes tener al menos 18 años para acceder a este contenido.';
+                return false;
             }
         }
-        event.preventDefault()
-        console.log('El usuario apretó el botón')
+
         function validarNombre() {
-            if(nombreInput.value.trim() === ''){
-                nombreError.innerText = 'Complete este campo'
-                return true
-            }else{
-                nombreInput.value === ''
-                return false
+            if (nombreInput.value.trim() === '') {
+                nombreError.innerText = 'Complete este campo';
+                return false;
+            } else {
+                nombreError.innerText = '';
+                return true;
             }
-            debugger
         }
+
         function validarPassword() {
-            if(passwordInput.value.trim() === ''){
-                passwordError.innerText = 'Complete este campo'
-                return true
-            }else{
-                passwordInput.value === ''
-                return false
-                debugger
+            if (passwordInput.value.trim() === '') {
+                passwordError.innerText = 'Complete este campo';
+                return false;
+            } else {
+                passwordError.innerText = '';
+                return true;
             }
         }
-        const resultado = validarNombre() && validarPassword()
-        debugger
-        if (resultado) {
-            console.log('Los inputs no tienen información')
-        } else {
-            console.log('Los inputs tienen información, puedo enviar la data')
+
+        const esEdadValida = verificarEdad();
+        const esNombreValido = validarNombre();
+        const esPasswordValido = validarPassword();
+
+        if (esEdadValida && esNombreValido && esPasswordValido) {
+            console.log('Los inputs tienen información válida, puedo enviar la data');
             const data = {
-                nombre : nombreInput.value.trim(),
-                password : passwordInput.value.trim()
-            }
-            console.log(data)
-            contentDiv.style.add('background-color:red')
-            contentDiv.classList.remove('content')
-            debugger
+                nombre: nombreInput.value.trim(),
+                password: passwordInput.value.trim()
+            };
+            console.log(data);
+            contentDiv.style.visibility = 'visible';
+        } else {
+            console.log('Los inputs no tienen información válida');
         }
-    })
-})
+let productos = [
+    { nombre: 'Vodka', edadMinima: 18 },
+    { nombre: 'Whisky', edadMinima: 21 },
+    { nombre: 'Cerveza Artesanal', edadMinima: 18 }
+  ];
+function VerificarProductos() {
+    const birthdate = document.getElementById('birthdate').value;
+    const birthDateNuevo = new Date(birthdate);
+    const today = new Date();
+    let age = today.getFullYear() - birthDateNuevo.getFullYear();
+    console.log(age)
+    const monthDifference = today.getMonth() - birthDateNuevo.getMonth();
+    const dayDifference = today.getDate() - birthDateNuevo.getDate();
+
+    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+        age--;
+    }
+
+    productos.forEach(producto => {
+        const edadMin = producto.edadMinima
+        const nombreProd = producto.nombre
+        if(age > edadMin){
+            const h2 = document.createElement('h2')
+            h2.innerText = `Podés tomar ${nombreProd}`
+            contentDiv.appendChild(h2)
+        }
+
+    });
+}
+VerificarProductos()
+    });
+});
