@@ -99,3 +99,50 @@ function VerificarProductos() {
 VerificarProductos()
     });
 });
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+    const esEdadValida = verificarEdad();
+    const esNombreValido = validarNombre();
+    const esPasswordValido = validarPassword();
+
+    if (esEdadValida && esNombreValido && esPasswordValido) {
+        const data = {
+            nombre: nombreInput.value.trim(),
+            password: passwordInput.value.trim(),
+            birthdate: document.getElementById('birthdate').value
+        };
+        const jsonData = JSON.stringify(data);
+        console.log(jsonData);
+
+        contentDiv.style.visibility = 'visible';
+    } else {
+        console.log('Los inputs no tienen información válida');
+    }
+
+    VerificarProductos();
+});
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const esEdadValida = verificarEdad();
+    const esNombreValido = validarNombre();
+    const esPasswordValido = validarPassword();
+
+    if (esEdadValida && esNombreValido && esPasswordValido) {
+        const data = {
+            nombre: nombreInput.value.trim(),
+            password: passwordInput.value.trim(),
+            birthdate: document.getElementById('birthdate').value
+        };
+        localStorage.setItem('formData', JSON.stringify(data));
+        console.log('Datos guardados en localStorage:', data);
+
+        contentDiv.style.visibility = 'visible';
+    } else {
+        console.log('Los inputs no tienen información válida');
+    }
+
+    VerificarProductos();
+});
